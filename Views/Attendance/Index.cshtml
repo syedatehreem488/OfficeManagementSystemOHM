@@ -1,0 +1,116 @@
+@model IEnumerable<OfficeManagementSystem.Models.Attendance>
+
+@{
+    bool isAdmin = Context.Session.GetString("IsAdmin") == "Yes";
+    ViewData["Title"] = isAdmin ? "Attendance Records" : "My Attendance";
+    var today = ViewBag.Today as OfficeManagementSystem.Models.Attendance;
+}
+
+@if (!isAdmin)
+{
+    <h2>My Attendance</h2>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Mark Today's Attendance — @DateTime.Today.ToString("dddd, dd MMM yyyy")</h5>
+        </div>
+        <div class="card-body">
+            @if (today == null)
+            {
+                <p class="text-muted">You haven't clocked in yet today.</p>
+                <form asp-action="ClockIn" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-success">Clock In</button>
+                </form>
+            }
+            else if (today.ClockOutTime == null)
+            {
+                <p>
+                    Clocked in at <strong>@today.ClockInTime.ToString(@"hh\:mm")</strong>
+                    @if (today.Status == "Late")
+                    {
+                        <span class="badge bg-warning text-dark">Late</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success">Present</span>
+                    }
+                </p>
+                <form asp-action="ClockOut" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-danger">Clock Out</button>
+                </form>
+            }
+            else
+            {
+                <p class="mb-0">
+                    All done for today —
+                    In <strong>@today.ClockInTime.ToString(@"hh\:mm")</strong>,
+                    Out <strong>@today.ClockOutTime.Value.ToString(@"hh\:mm")</strong>
+                    @if (today.Status == "Late")
+                    {
+                        <span class="badge bg-warning text-dark">Late</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success">Present</span>
+                    }
+                </p>
+            }
+        </div>
+    </div>
+
+    <h4>My Records</h4>
+}
+else
+{
+    <h2>Attendance Records</h2>
+}
+
+@if (!Model.Any())
+{
+    <p class="text-muted">No attendance records yet.</p>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                @if (isAdmin)
+                {
+                    <th>Employee ID</th>
+                }
+                <th>Date</th>
+                <th>Clock In</th>
+                <th>Clock Out</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    @if (isAdmin)
+                    {
+                        <td>@item.EmployeeID</td>
+                    }
+                    <td>@item.AttendanceDate.ToShortDateString()</td>
+                    <td>@item.ClockInTime.ToString(@"hh\:mm")</td>
+                    <td>@(item.ClockOutTime.HasValue ? item.ClockOutTime.Value.ToString(@"hh\:mm") : "—")</td>
+                    <td>
+                        @if (item.Status == "Present")
+                        {
+                            <span class="badge bg-success">Present</span>
+                        }
+                        else if (item.Status == "Late")
+                        {
+                            <span class="badge bg-warning text-dark">Late</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">Absent</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

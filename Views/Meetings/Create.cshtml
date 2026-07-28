@@ -1,0 +1,39 @@
+@model OfficeManagementSystem.Models.Meeting
+
+@{
+    ViewData["Title"] = "Schedule Meeting";
+}
+
+<h2>Schedule Meeting</h2>
+
+<form asp-action="Create" method="post">
+
+    <div class="mb-3">
+        <label>Title</label>
+        <input asp-for="Title" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+        <label>Meeting Date</label>
+        <input asp-for="MeetingDate" type="date" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+        <label>Location</label>
+        <input asp-for="Location" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+        <label>Description</label>
+        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label>Organizer ID</label>
+        <input asp-for="OrganizerID" class="form-control" required />
+    </div>
+
+    <button type="submit" class="btn btn-success">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+
+</form>

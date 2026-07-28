@@ -1,0 +1,75 @@
+@model OfficeManagementSystem.Models.Employee
+
+<h2>Add Employee</h2>
+
+<form asp-action="Create" method="post">
+
+    <div class="mb-3">
+        <label>First Name</label>
+        <input asp-for="FirstName" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Last Name</label>
+        <input asp-for="LastName" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Email</label>
+        <input asp-for="Email" type="email" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Phone</label>
+        <input asp-for="Phone" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Gender</label>
+        <select asp-for="Gender" class="form-control">
+            <option value="">-- Select --</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label>Date of Birth</label>
+        <input asp-for="DOB" type="date" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Hire Date</label>
+        <input asp-for="HireDate" type="date" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Status</label>
+        <select asp-for="Status" class="form-control">
+            <option value="">-- Select --</option>
+            <option value="Active">Active</option>
+            <option value="Resigned">Resigned</option>
+            <option value="Terminated">Terminated</option>
+            <option value="Retired">Retired</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label>Department ID</label>
+        <input asp-for="DepartmentID" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Role ID</label>
+        <input asp-for="RoleID" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-success">
+        Save
+    </button>
+
+    <a asp-action="Index" class="btn btn-secondary">
+        Cancel
+    </a>
+
+</form>

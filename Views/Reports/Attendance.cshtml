@@ -1,0 +1,72 @@
+@model IEnumerable<OfficeManagementSystem.Models.Attendance>
+
+@{
+    ViewData["Title"] = "Attendance Report";
+    DateTime? start = ViewBag.Start as DateTime?;
+    DateTime? end = ViewBag.End as DateTime?;
+    int? empId = ViewBag.EmployeeId as int?;
+    string startStr = start?.ToString("yyyy-MM-dd");
+    string endStr = end?.ToString("yyyy-MM-dd");
+}
+
+<h2>Attendance Report</h2>
+
+<div class="card mb-4">
+    <div class="card-header"><h5 class="mb-0">Filters</h5></div>
+    <div class="card-body">
+        <form asp-action="Attendance" method="get" class="row g-3 align-items-end">
+            <div class="col-md-3">
+                <label>Start Date</label>
+                <input type="date" name="start" value="@startStr" class="form-control" />
+            </div>
+            <div class="col-md-3">
+                <label>End Date</label>
+                <input type="date" name="end" value="@endStr" class="form-control" />
+            </div>
+            <div class="col-md-3">
+                <label>Employee ID (optional)</label>
+                <input type="number" name="employeeId" value="@empId" class="form-control" placeholder="All employees" />
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary">Generate</button>
+                <a class="btn btn-danger"
+                   href="@Url.Action("AttendancePdf", new { start = startStr, end = endStr, employeeId = empId })">
+                    Download PDF
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<h4>Results (@Model.Count())</h4>
+
+@if (!Model.Any())
+{
+    <p class="text-muted">No records match these filters.</p>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Employee ID</th>
+                <th>Date</th>
+                <th>Clock In</th>
+                <th>Clock Out</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.EmployeeID</td>
+                    <td>@item.AttendanceDate.ToShortDateString()</td>
+                    <td>@item.ClockInTime.ToString(@"hh\:mm")</td>
+                    <td>@(item.ClockOutTime.HasValue ? item.ClockOutTime.Value.ToString(@"hh\:mm") : "—")</td>
+                    <td>@item.Status</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

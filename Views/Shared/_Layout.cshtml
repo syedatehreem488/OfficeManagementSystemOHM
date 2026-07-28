@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Office Management System</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">OMS</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                @if (Context.Session.GetString("UserName") != null)
+                {
+                    var isAdminNav = Context.Session.GetString("IsAdmin") == "Yes";
+                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                        <ul class="navbar-nav flex-grow-1">
+
+                            @if (isAdminNav)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-controller="Employees" asp-action="Index">Employees</a>
+                                </li>
+                            }
+
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-controller="Attendance" asp-action="Index">@(isAdminNav ? "Attendance" : "My Attendance")</a>
+                            </li>
+
+                            <li class="nav-item">
+                                @if (isAdminNav)
+                                {
+                                    <a class="nav-link text-white" asp-controller="Leave" asp-action="Admin">Leave Requests</a>
+                                }
+                                else
+                                {
+                                    <a class="nav-link text-white" asp-controller="Leave" asp-action="Index">My Leaves</a>
+                                }
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-controller="Payroll" asp-action="Index">@(isAdminNav ? "Payroll" : "My Payroll")</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-controller="Projects" asp-action="Index">Projects</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-controller="Meetings" asp-action="Index">Meetings</a>
+                            </li>
+
+                            @if (isAdminNav)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-controller="Reports" asp-action="Index">Reports</a>
+                                </li>
+                            }
+
+                        </ul>
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a class="nav-link text-warning" href="/Account/Logout">
+                                    Logout (@Context.Session.GetString("UserName"))
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                }
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+
+            @* Shows validation errors (ViewBag.Error) and action results (TempData) *@
+            @if (ViewBag.Error != null || TempData["Error"] != null)
+            {
+                <div class="alert alert-danger" role="alert">
+                    @(ViewBag.Error ?? TempData["Error"])
+                </div>
+            }
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success" role="alert">
+                    @TempData["Success"]
+                </div>
+            }
+
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted mt-4">
+        <div class="container">
+            &copy; 2026 - Office Management System
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

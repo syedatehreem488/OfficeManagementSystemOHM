@@ -1,0 +1,81 @@
+@model IEnumerable<OfficeManagementSystem.Models.AttendanceSummary>
+
+@{
+    ViewData["Title"] = "Dashboard";
+    var totalPresent = Model.Sum(x => x.TotalPresent);
+    var totalAbsent = Model.Sum(x => x.TotalAbsent);
+    var totalLate = Model.Sum(x => x.TotalLate);
+    var totalPending = Model.Sum(x => x.PendingLeaves);
+}
+
+<h2 class="mt-2">Dashboard</h2>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-center bg-success text-white">
+            <div class="card-body">
+                <h5>Present</h5>
+                <h2>@totalPresent</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center bg-danger text-white">
+            <div class="card-body">
+                <h5>Absent</h5>
+                <h2>@totalAbsent</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center bg-warning text-dark">
+            <div class="card-body">
+                <h5>Late</h5>
+                <h2>@totalLate</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center bg-info text-white">
+            <div class="card-body">
+                <h5>Pending Leaves</h5>
+                <h2>@totalPending</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr />
+
+<h4>Employee Attendance Summary</h4>
+
+@if (!Model.Any())
+{
+    <p class="text-muted">No attendance data available.</p>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Employee</th>
+                <th>Present</th>
+                <th>Absent</th>
+                <th>Late</th>
+                <th>Pending Leaves</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.EmployeeName</td>
+                    <td>@item.TotalPresent</td>
+                    <td>@item.TotalAbsent</td>
+                    <td>@item.TotalLate</td>
+                    <td>@item.PendingLeaves</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

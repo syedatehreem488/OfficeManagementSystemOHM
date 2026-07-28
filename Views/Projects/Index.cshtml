@@ -1,0 +1,59 @@
+@model IEnumerable<OfficeManagementSystem.Models.Project>
+
+@{
+    ViewData["Title"] = "Projects";
+    bool isAdmin = Context.Session.GetString("IsAdmin") == "Yes";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Projects</h2>
+    @if (isAdmin)
+    {
+        <a asp-action="Create" class="btn btn-primary">New Project</a>
+    }
+</div>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Project Name</th>
+            <th>Description</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Status</th>
+            @if (isAdmin)
+            {
+                <th>Actions</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.ProjectName</td>
+                <td>@item.Description</td>
+                <td>@item.StartDate.ToShortDateString()</td>
+                <td>@item.EndDate.ToShortDateString()</td>
+                <td>
+                    @if (item.Status == "Completed")
+                    {
+                        <span class="badge bg-success">Completed</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-primary">Ongoing</span>
+                    }
+                </td>
+                @if (isAdmin)
+                {
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.ProjectID" class="btn btn-warning btn-sm">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@item.ProjectID" class="btn btn-danger btn-sm"
+                           onclick="return confirm('Delete this project?')">Delete</a>
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>

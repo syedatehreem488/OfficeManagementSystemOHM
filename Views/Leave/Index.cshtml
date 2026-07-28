@@ -1,0 +1,101 @@
+@model IEnumerable<OfficeManagementSystem.Models.LeaveRequest>
+
+@{
+    ViewData["Title"] = "My Leaves";
+}
+
+<h2>My Leave Requests</h2>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <h5 class="mb-0">Submit a New Leave Request</h5>
+    </div>
+    <div class="card-body">
+        <form asp-action="Submit" method="post">
+
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label>Leave Type</label>
+                    <select name="LeaveTypeID" class="form-control" required>
+                        <option value="">-- Select Type --</option>
+                        <option value="1">Annual Leave</option>
+                        <option value="2">Sick Leave</option>
+                        <option value="3">Casual Leave</option>
+                        <option value="4">Unpaid Leave</option>
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label>Start Date</label>
+                    <input name="StartDate" type="date" class="form-control" required />
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label>End Date</label>
+                    <input name="EndDate" type="date" class="form-control" required />
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label>Reason</label>
+                <textarea name="Reason" class="form-control" rows="2" required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit Request</button>
+
+        </form>
+    </div>
+</div>
+
+<h4>My Previous Requests</h4>
+
+@if (!Model.Any())
+{
+    <p class="text-muted">You have no leave requests yet.</p>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Leave Type</th>
+                <th>Reason</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @(item.LeaveTypeID switch
+                        {
+                            1 => "Annual Leave",
+                            2 => "Sick Leave",
+                            3 => "Casual Leave",
+                            4 => "Unpaid Leave",
+                            _ => $"Leave #{item.LeaveTypeID}"
+                        })
+                    </td>
+                    <td>@item.Reason</td>
+                    <td>@item.StartDate.ToShortDateString()</td>
+                    <td>@item.EndDate.ToShortDateString()</td>
+                    <td>
+                        @if (item.Approved == "Approved")
+                        {
+                            <span class="badge bg-success">Approved</span>
+                        }
+                        else if (item.Approved == "Rejected")
+                        {
+                            <span class="badge bg-danger">Rejected</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning text-dark">Pending</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

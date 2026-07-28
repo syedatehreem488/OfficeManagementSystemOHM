@@ -1,0 +1,82 @@
+@model IEnumerable<OfficeManagementSystem.Models.Payroll>
+
+@{
+    ViewData["Title"] = "Payroll Report";
+    DateTime? start = ViewBag.Start as DateTime?;
+    DateTime? end = ViewBag.End as DateTime?;
+    int? empId = ViewBag.EmployeeId as int?;
+    string startStr = start?.ToString("yyyy-MM-dd");
+    string endStr = end?.ToString("yyyy-MM-dd");
+    int totalNet = Model.Sum(p => p.NetSalary);
+}
+
+<h2>Payroll Report</h2>
+
+<div class="card mb-4">
+    <div class="card-header"><h5 class="mb-0">Filters</h5></div>
+    <div class="card-body">
+        <form asp-action="Payroll" method="get" class="row g-3 align-items-end">
+            <div class="col-md-3">
+                <label>Start Date</label>
+                <input type="date" name="start" value="@startStr" class="form-control" />
+            </div>
+            <div class="col-md-3">
+                <label>End Date</label>
+                <input type="date" name="end" value="@endStr" class="form-control" />
+            </div>
+            <div class="col-md-3">
+                <label>Employee ID (optional)</label>
+                <input type="number" name="employeeId" value="@empId" class="form-control" placeholder="All employees" />
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary">Generate</button>
+                <a class="btn btn-danger"
+                   href="@Url.Action("PayrollPdf", new { start = startStr, end = endStr, employeeId = empId })">
+                    Download PDF
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<h4>Results (@Model.Count())</h4>
+
+@if (!Model.Any())
+{
+    <p class="text-muted">No records match these filters.</p>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Employee ID</th>
+                <th>Bonus</th>
+                <th>Deduction</th>
+                <th>Net Salary</th>
+                <th>Payment Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.EmployeeID</td>
+                    <td>@item.Bonus.ToString("N0")</td>
+                    <td>@item.Deduction.ToString("N0")</td>
+                    <td>@item.NetSalary.ToString("N0")</td>
+                    <td>@item.PaymentDate.ToShortDateString()</td>
+                    <td>@item.Status</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr class="fw-bold">
+                <td colspan="3" class="text-end">Total Net Salary</td>
+                <td>@totalNet.ToString("N0")</td>
+                <td colspan="2"></td>
+            </tr>
+        </tfoot>
+    </table>
+}

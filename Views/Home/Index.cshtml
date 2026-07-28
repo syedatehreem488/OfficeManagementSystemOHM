@@ -1,0 +1,73 @@
+@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="container mt-4">
+    <h1>Office Management System</h1>
+    <p class="text-muted">Welcome, @Context.Session.GetString("UserName")</p>
+
+    <div class="alert @(ViewBag.ConnectionStatus == "Connected Successfully" ? "alert-success" : "alert-danger")">
+        Database: @ViewBag.ConnectionStatus
+    </div>
+
+    @{
+        bool isAdminHome = Context.Session.GetString("IsAdmin") == "Yes";
+    }
+
+    <div class="row mt-3">
+        @if (isAdminHome)
+        {
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h5>Employees</h5>
+                        <a asp-controller="Employees" asp-action="Index" class="btn btn-outline-primary btn-sm mt-2">View</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h5>Attendance</h5>
+                        <a asp-controller="Attendance" asp-action="Index" class="btn btn-outline-primary btn-sm mt-2">View</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h5>Payroll</h5>
+                        <a asp-controller="Payroll" asp-action="Index" class="btn btn-outline-primary btn-sm mt-2">View</a>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h5>My Attendance</h5>
+                        <a asp-controller="Attendance" asp-action="Index" class="btn btn-outline-primary btn-sm mt-2">Clock In / Out</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h5>My Leaves</h5>
+                        <a asp-controller="Leave" asp-action="Index" class="btn btn-outline-primary btn-sm mt-2">View</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h5>My Payroll</h5>
+                        <a asp-controller="Payroll" asp-action="Index" class="btn btn-outline-primary btn-sm mt-2">View</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,75 @@
+@model IEnumerable<OfficeManagementSystem.Models.Payroll>
+
+@{
+    bool isAdmin = Context.Session.GetString("IsAdmin") == "Yes";
+    ViewData["Title"] = isAdmin ? "Payroll" : "My Payroll";
+}
+
+<h2>@(isAdmin ? "Payroll Records" : "My Payroll")</h2>
+
+@if (isAdmin)
+{
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Process Payroll</h5>
+        </div>
+        <div class="card-body">
+            <form asp-action="Process" method="post">
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <label>Employee ID</label>
+                        <input name="employeeId" type="number" class="form-control" required />
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label>Bonus</label>
+                        <input name="bonus" type="number" class="form-control" value="0" min="0" required />
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label>Deduction</label>
+                        <input name="deduction" type="number" class="form-control" value="0" min="0" required />
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label>Payment Date</label>
+                        <input name="paymentDate" type="date" class="form-control" required />
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Process Payroll</button>
+            </form>
+        </div>
+    </div>
+}
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Employee ID</th>
+            <th>Bonus</th>
+            <th>Deduction</th>
+            <th>Net Salary</th>
+            <th>Payment Date</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.EmployeeID</td>
+                <td>@item.Bonus.ToString("N0")</td>
+                <td>@item.Deduction.ToString("N0")</td>
+                <td>@item.NetSalary.ToString("N0")</td>
+                <td>@item.PaymentDate.ToShortDateString()</td>
+                <td>
+                    @if (item.Status == "Paid")
+                    {
+                        <span class="badge bg-success">Paid</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-warning text-dark">Pending</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

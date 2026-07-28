@@ -1,0 +1,74 @@
+@model IEnumerable<OfficeManagementSystem.Models.LeaveRequest>
+
+@{
+    ViewData["Title"] = "Leave Requests — Admin";
+}
+
+<h2>Leave Requests — Admin Panel</h2>
+
+@if (!Model.Any())
+{
+    <p class="text-muted">No leave requests found.</p>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Employee ID</th>
+                <th>Leave Type</th>
+                <th>Reason</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.EmployeeID</td>
+                    <td>
+                        @(item.LeaveTypeID switch
+                        {
+                            1 => "Annual Leave",
+                            2 => "Sick Leave",
+                            3 => "Casual Leave",
+                            4 => "Unpaid Leave",
+                            _ => $"Leave #{item.LeaveTypeID}"
+                        })
+                    </td>
+                    <td>@item.Reason</td>
+                    <td>@item.StartDate.ToShortDateString()</td>
+                    <td>@item.EndDate.ToShortDateString()</td>
+                    <td>
+                        @if (item.Approved == "Approved")
+                        {
+                            <span class="badge bg-success">Approved</span>
+                        }
+                        else if (item.Approved == "Rejected")
+                        {
+                            <span class="badge bg-danger">Rejected</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning text-dark">Pending</span>
+                        }
+                    </td>
+                    <td>
+                        @if (item.Approved == "Pending")
+                        {
+                            <a asp-action="Approve" asp-route-id="@item.LeaveID" class="btn btn-success btn-sm">Approve</a>
+                            <a asp-action="Reject" asp-route-id="@item.LeaveID" class="btn btn-danger btn-sm">Reject</a>
+                        }
+                        else
+                        {
+                            <span class="text-muted">—</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

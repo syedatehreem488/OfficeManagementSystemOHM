@@ -1,0 +1,27 @@
+@{
+    ViewData["Title"] = "Reports";
+}
+
+<h2>Reports</h2>
+<p class="text-muted">Generate filtered reports by date range and employee, view them on screen, and download them as PDF.</p>
+
+<div class="row mt-3">
+    <div class="col-md-6 mb-3">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <h5>Attendance Report</h5>
+                <p class="text-muted">Attendance records filtered by date range and employee.</p>
+                <a asp-action="Attendance" class="btn btn-primary">Open</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 mb-3">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <h5>Payroll Report</h5>
+                <p class="text-muted">Payroll records filtered by payment date and employee, with a net-salary total.</p>
+                <a asp-action="Payroll" class="btn btn-primary">Open</a>
+            </div>
+        </div>
+    </div>
+</div>
