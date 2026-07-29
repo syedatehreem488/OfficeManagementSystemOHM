@@ -16,10 +16,10 @@ jobs:
           dotnet-version: 8.0.x
 
       - name: Restore
-        run: dotnet restore OfficeManagementSystem.sln
+        run: dotnet restore OfficeManagementSystem.csproj
 
       - name: Build
-        run: dotnet build OfficeManagementSystem.sln --configuration Release --no-restore
+        run: dotnet build OfficeManagementSystem.csproj --configuration Release --no-restore
 
       - name: Publish
-        run: dotnet publish OfficeManagementSystem.sln -c Release -o publish
+        run: dotnet publish OfficeManagementSystem.csproj -c Release -o publish
