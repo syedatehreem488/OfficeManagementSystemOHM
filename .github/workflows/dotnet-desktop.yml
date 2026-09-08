@@ -1,0 +1,25 @@
+name: Build ASP.NET Core
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore
+        run: dotnet restore OfficeManagementSystem.csproj
+
+      - name: Build
+        run: dotnet build OfficeManagementSystem.csproj --configuration Release --no-restore
+
+      - name: Publish
+        run: dotnet publish OfficeManagementSystem.csproj -c Release -o publish
