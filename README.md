@@ -8,6 +8,12 @@
 
 A full-stack web application for managing day-to-day office operations — employees, attendance, leave requests, payroll, projects, and meetings — built with **ASP.NET Core MVC (.NET 10)** and **MySQL**.
 
+🌐 **Live demo:** https://officemanagementsystemohm-1.onrender.com/
+
+🔑 **Demo login (Employee):** `ali.khan@office.com` / `Ali3452`
+
+> The demo runs on free hosting, so the first load can take up to a minute while the server wakes up.
+
 ---
 
 ## 📋 Table of Contents
@@ -67,8 +73,8 @@ Make sure the following are installed before running the project:
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/syedatehreem488/Office-Management-System.git
-cd Office-Management-System
+git clone https://github.com/syedatehreem488/OfficeManagementSystemOHM.git
+cd OfficeManagementSystemOHM
 ```
 
 ### 2. Create the database
@@ -319,7 +325,7 @@ INSERT INTO Roles (RoleName) VALUES ('Manager');
 INSERT INTO Employees (FirstName, LastName, Email, Phone, Gender, DOB, HireDate, DepartmentID, RoleID)
     VALUES ('Admin', 'User', 'admin@company.com', '03001234567', 'Male', '1990-01-01', '2020-01-01', 1, 1);
 INSERT INTO Users (UserName, Password, EmployeeID, IsActive, IsAdmin)
-    VALUES ('admin', 'admin123', 1, 'Yes', 'Yes');
+    VALUES ('admin', 'CHOOSE_A_STRONG_PASSWORD', 1, 'Yes', 'Yes');
 ```
 
 > ⚠️ **Security note:** Passwords are stored as plain text in this version. Hash them with BCrypt or ASP.NET Core's `PasswordHasher` before any real deployment.
